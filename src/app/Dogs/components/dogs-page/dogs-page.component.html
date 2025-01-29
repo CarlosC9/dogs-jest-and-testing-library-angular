@@ -1,0 +1,5 @@
+<app-dogs-list [dogsList]="dogs() ?? []"/>
+
+<div class="mt-1.5 flex justify-center">
+  <app-button-tailwind text="Cargar otros perros" (onClick)="getRandomDogsSubject$.next()"/>
+</div>

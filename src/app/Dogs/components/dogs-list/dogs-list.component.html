@@ -1,0 +1,7 @@
+<ul class="list-none grid grid-cols-4 gap-1.5">
+  @for (dog of dogsList(); track $index) {
+    <li class="aspect-square">
+      <app-dog-item [img]="dog.image"/>
+    </li>
+  }
+</ul>
