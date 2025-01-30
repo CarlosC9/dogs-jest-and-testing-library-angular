@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
 import {DogsListComponent} from '@app/Dogs/components/dogs-list/dogs-list.component';
 import {DogApiService} from '@app/Dogs/services';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
 import {ButtonTailwindComponent} from '@app/shared/components/button-tailwind/button-tailwind.component';
 import {Subject, switchMap} from 'rxjs';
 
@@ -18,14 +18,15 @@ import {Subject, switchMap} from 'rxjs';
 })
 export class DogsPageComponent implements OnInit {
 
-  private readonly dogsAPI = inject(DogApiService)
+  readonly dogsAPI = inject(DogApiService)
 
-  public readonly getRandomDogsSubject$ = new Subject<void>()
-  private readonly getRandomDogs$ = this.getRandomDogsSubject$.pipe(
-    switchMap(() => this.dogsAPI.getRandomDogs({ quantity: 12 }))
+  readonly getRandomDogsSubject$ = new Subject<void>()
+  readonly getRandomDogs$ = this.getRandomDogsSubject$.pipe(
+    switchMap(() => this.dogsAPI.getRandomDogs({ quantity: 12 })),
+    takeUntilDestroyed()
   )
 
-  protected readonly dogs = toSignal(this.getRandomDogs$)
+  readonly dogs = toSignal(this.getRandomDogs$)
 
   ngOnInit() {
     this.getRandomDogsSubject$.next()

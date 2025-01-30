@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ButtonTailwindComponent } from './button-tailwind.component';
+import {render, screen} from '@testing-library/angular';
+import {ButtonTailwindComponent} from './button-tailwind.component';
+import {userEvent} from '@testing-library/user-event';
 
 describe('ButtonTailwindComponent', () => {
-  let component: ButtonTailwindComponent;
-  let fixture: ComponentFixture<ButtonTailwindComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ButtonTailwindComponent]
+  it('Should emit an event in the onClick output when the button is clicked', async () => {
+    const onClickSpy = jest.fn()
+    await render(ButtonTailwindComponent, {
+      inputs: {
+        text: ''
+      },
+      on: {
+        onClick: onClickSpy
+      }
     })
-    .compileComponents();
 
-    fixture = TestBed.createComponent(ButtonTailwindComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    await userEvent.click(await screen.findByRole('button'))
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(onClickSpy).toHaveBeenCalled()
   });
 });
